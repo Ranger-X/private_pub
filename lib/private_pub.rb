@@ -1,6 +1,8 @@
 require "digest/sha1"
 require "net/http"
-require "yajl/json_gem"
+require "yaml"
+require 'json'
+#require "yajl/json_gem"
 
 require "private_pub/faye_extension"
 require "private_pub/engine" if defined? Rails
@@ -28,7 +30,7 @@ module PrivatePub
 
     # Loads the options from a given YAML file and environment (such as production)
     def load_redis_config(filename, environment)
-      yaml = YAML.load_file(filename)[environment.to_s]
+      yaml = YAML.load(ERB.new(File.read(filename)).result)[environment.to_s]
       options = {:engine => {:type => Faye::Redis}}
       yaml.each {|k, v| options[:engine][k.to_sym] = v}
       options

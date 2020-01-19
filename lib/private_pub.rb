@@ -3,6 +3,7 @@ require "net/http"
 require "yaml"
 require 'json'
 #require "yajl/json_gem"
+require "net/https"
 
 require "private_pub/faye_extension"
 require "private_pub/engine" if defined? Rails

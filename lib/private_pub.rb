@@ -7,6 +7,7 @@ require "net/https"
 
 require "private_pub/faye_extension"
 require "private_pub/engine" if defined? Rails
+require 'erb'
 
 module PrivatePub
   class Error < StandardError; end
@@ -32,9 +33,9 @@ module PrivatePub
     # Loads the options from a given YAML file and environment (such as production)
     def load_redis_config(filename, environment)
       yaml = YAML.load(ERB.new(File.read(filename)).result)[environment.to_s]
-      options = {:engine => {:type => Faye::Redis}}
+      options = ({ engine: { type: Faye::Redis }})
       yaml.each {|k, v| options[:engine][k.to_sym] = v}
-      options
+      @default_options.merge!(options)
     end
 
     # Publish the given data to a specific channel. This ends up sending
